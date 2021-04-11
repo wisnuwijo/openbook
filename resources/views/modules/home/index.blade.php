@@ -20,11 +20,11 @@
                         <table>
                             <tr>
                                 <td width="50px"><span class="avatar">1</span></td>
-                                <td>Create Topic</td>
+                                <td>Create Topic and Version</td>
                             </tr>
                             <tr>
                                 <td width="50px"><span class="avatar">2</span></td>
-                                <td>Create Version</td>
+                                <td>Create Documentation Breakdown</td>
                             </tr>
                             <tr>
                                 <td width="50px"><span class="avatar">3</span></td>

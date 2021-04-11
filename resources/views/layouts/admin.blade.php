@@ -1,12 +1,4 @@
 <!doctype html>
-<!--
-* Tabler - Premium and Open Source dashboard template with responsive and high quality UI.
-* @version 1.0.0-alpha.5
-* @link https://github.com/tabler/tabler
-* Copyright 2018-2019 The Tabler Authors
-* Copyright 2018-2019 codecalm.net Paweł Kuna
-* Licensed under MIT (https://tabler.io/license)
--->
 <html lang="en">
   <head>
     <meta charset="utf-8"/>

@@ -34,43 +34,6 @@ function menu() {
             </li>';
         }
     }
-    
-    
-    // echo (
-    // '<li class="nav-item">
-    //     <a class="nav-link" href="./tabler/index.html" >
-    //         <span class="nav-link-title">
-    //         Home
-    //         </span>
-    //     </a>
-    //     </li>
-        
-    //     <li class="nav-item dropdown">
-    //     <a class="nav-link dropdown-toggle" href="#navbar-layout" data-toggle="dropdown" role="button" aria-expanded="false">
-    //         <span class="nav-link-icon d-md-none d-lg-inline-block"></span>
-    //         <span class="nav-link-title">
-    //         User Management
-    //         </span>
-    //     </a>
-    //     <ul class="dropdown-menu">
-    //         <li>
-    //         <a class="dropdown-item" href="./tabler/empty.html">
-    //             View user list
-    //         </a>
-    //         </li>
-    //         <li>
-    //         <a class="dropdown-item" href="./tabler/empty.html">
-    //             Create new user
-    //         </a>
-    //         </li>
-    //         <li>
-    //         <a class="dropdown-item" href="./tabler/empty.html">
-    //             Manage access
-    //         </a>
-    //         </li>
-    //     </ul>
-    // </li>'
-    // );
 
     echo $menu;
 }

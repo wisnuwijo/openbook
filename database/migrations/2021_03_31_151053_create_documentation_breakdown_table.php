@@ -19,7 +19,7 @@ class CreateDocumentationBreakdownTable extends Migration
             $table->bigInteger('version_id');
             $table->string('name', 200);
             $table->string('link', 200);
-            $table->integer('parent_id');
+            $table->integer('parent_id')->nullable();
             $table->timestamps();
         });
     }

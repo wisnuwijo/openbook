@@ -18,7 +18,7 @@ class ModuleSeeder extends Seeder
         ]);
 
         DB::table('module')->insert([
-            'name' => 'Post',
+            'name' => 'Documentation',
             'url' => '',
             'created_at' => now()
         ]);
@@ -30,15 +30,15 @@ class ModuleSeeder extends Seeder
         ]);
 
         DB::table('module')->insert([
-            'name' => 'View post',
-            'url' => '/admin/post/view',
+            'name' => 'View documentation',
+            'url' => '/admin/documentation/view',
             'parent_id' => 2,
             'created_at' => now()
         ]);
 
         DB::table('module')->insert([
             'name' => 'Create new topic',
-            'url' => '/admin/post/new-topic',
+            'url' => '/admin/documentation/new-topic',
             'parent_id' => 2,
             'created_at' => now()
         ]);

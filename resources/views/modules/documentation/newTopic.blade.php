@@ -26,11 +26,16 @@
                             </div>
                         @endif
 
-                        <form action='{{ url("/admin/post/new-topic") }}' method="POST">
+                        <form action='{{ url("/admin/documentation/new-topic") }}' method="POST">
                             @csrf
                             <div class="form-group">
                                 <label class="form-label required">Topic name</label>
                                 <input type="text" class="form-control" name="name" placeholder="Example : Firecek" required>
+                            </div>
+                            <br/>
+                            <div class="form-group">
+                                <label class="form-label required">Initial Version</label>
+                                <input type="text" class="form-control" name="version_name" placeholder="Example : 1.0" required>
                             </div>
                             <br/>
                             <div class="form-group">
