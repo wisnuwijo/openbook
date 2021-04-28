@@ -36,6 +36,30 @@
             padding: 7px;
             border-radius: 8px;
         }
+
+        .breadcrumb-delete-btn {
+            width:20px;
+            height:20px;
+            border-radius:10px;
+            padding:0px;
+            font-size:10pt
+        }
+
+        .breadcrumb-input-text {
+            margin-left: 8px;
+            border:0px;
+            border-bottom: 1px solid #dee2e7;
+            outline: none;
+            width: '50px';
+        }
+
+        .input-underline {
+            margin-left: 8px;
+            border:0px;
+            border-bottom: 1px solid #dee2e7;
+            outline: none;
+            width: '50px';
+        }
     </style>
 
     <!-- page-wrapper -->
@@ -59,58 +83,7 @@
         <div class="title"></div>
         <div class="action" style="padding-top:10px"></div>
     </div>
-    <div class="page-wrapper toggled light-theme">
-        <nav id="sidebar" class="sidebar-wrapper">
-            <div class="sidebar-content">
-                <!-- sidebar-brand  -->
-                <div class="sidebar-item sidebar-brand font-weight-bold" style="background-color:#F9F9F9">@yield('docs-title')</div>
-                <!-- sidebar-header  -->
-                <!-- sidebar-menu  -->
-                <div class=" sidebar-item sidebar-menu" style="padding-top:40px">
-                    <ul class="sidebar-ul"></ul>
-                </div>
-                <!-- sidebar-menu  -->
-            </div>
-        </nav>
-        <!-- page-content  -->
-        <main class="page-content">
-            <div id="overlay" class="overlay"></div>
-            <div class="container-fluid">
-                <div class="row d-flex align-items-center p-3 border-bottom">
-                    <div class="col-md-1">
-                        <a id="toggle-sidebar" class="btn rounded-0 p-3" href="#"> <i class="fas fa-bars"></i> </a>
-                    </div>
-                    <div class="col-md-8">
-                        <nav aria-label="breadcrumb" class="align-items-center">
-                            <a href="index.html" class="breadcrumb-back" title="Back"></a>
-                            <ol class="breadcrumb d-none d-lg-inline-flex m-0 docs-breadcrumb"></ol>
-                        </nav>
-                    </div>
-                    <div class="col-md-3 text-left">
-                        <table>
-                            <tr>
-                                <td width="50px">Version</td>
-                                <td>
-                                    <select class="form-control">
-                                        <option value="1">1.0</option>
-                                    </select>
-                                </td>
-                            </tr>
-                        </table>
-                    </div>
-                </div>
-                <div class="row p-lg-4">
-                    <article class="main-content col-md-9 pr-lg-5">
-                        @yield('content')
-                    </article>
-                    <aside class="col-md-3 d-none d-md-block border-left">
-                        @yield('aside-right')
-                    </aside>
-                </div>
-            </div>
-        </main>
-        <!-- page-content -->
-    </div>
+    @yield('content')
     
     @yield('script')
 </body>

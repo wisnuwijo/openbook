@@ -15,8 +15,8 @@ class CreateDocumentationDetailTable extends Migration
     {
         Schema::create('documentation_detail', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->bigInteger('documentation_breakdown_id');
-            $table->text('content')->nullable();
+            $table->bigInteger('documentation_breakdown_id')->unique();
+            $table->longtext('content')->nullable();
             $table->integer('created_by');
             $table->timestamps();
         });

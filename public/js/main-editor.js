@@ -1,20 +1,48 @@
+class EditorHelper {
+
+    getData = (activeBreadownId) => {
+        return axios.get(endpoint + '/builder/editor/get', {
+            params: {
+                'breakdown_id': activeBreadownId
+            }
+        });
+    }
+
+    save = (editor, activeBreadownId) => {
+        editor.save().then((outputData) => {
+            // console.log('Article data: ', outputData)
+            this.saveToDB(outputData, activeBreadownId);
+        }).catch((error) => {
+            // console.log('Saving failed: ', error)
+        });
+    }
+
+    saveToDB = (outputData, activeBreadownId) => {
+        // save-doc-detail
+        axios.post(endpoint + '/builder/editor/save', {
+            documentation_breakdown_id: activeBreadownId,
+            content: JSON.stringify(outputData),
+            created_by: 2
+        })
+            .then(res => console.log(res.data.data))
+            .catch(err => console.log(err));
+    }
+}
+
 const editorFile = $('script[src*=main-editor]');
 const endpoint = editorFile.attr('endpoint');
 const token = editorFile.attr('token');
+const userId = editorFile.attr('user-id');
+
+const editorHelper = new EditorHelper();
+
+let activePageId = 0;
+let activePageData = {};
 
 const editor = new EditorJS({
-    /** 
-     * Id of Element that should contain the Editor 
-     */
     holder: 'editorjs',
-
     placeholder: 'Let`s write an awesome documentation!',
     autofocus: true,
-
-    /**
-     * Available Tools list.
-     * Pass Tool's class or Settings object for each Tool you want to use
-     */
     tools: {
         image: SimpleImage,
         code: CodeTool,
@@ -29,40 +57,43 @@ const editor = new EditorJS({
         },
         list: List
     },
-    data: {},
-
-    /**
-    * onChange callback
-    */
+    data: activePageData,
     onChange: () => {
-        const editorHelper = new EditorHelper();
-
-        editorHelper.save();
+        editor.save().then((outputData) => {
+            // console.log('currHash', activePageId);
+            // console.log('Article data: ', outputData)
+            editorHelper.saveToDB(outputData, activePageId);
+        }).catch((error) => {
+            // console.log('Saving failed: ', error)
+        });
     }
 });
 
-class EditorHelper {
+window.addEventListener("hashchange", function () {
+    let currHash = location.hash.substring(1).split('-');
+    let breaddownChildren = currHash[1];
 
-    save = () => {
-        editor.save().then((outputData) => {
-            console.log('Article data: ', outputData)
-            this.saveToDB(outputData);
-        }).catch((error) => {
-            console.log('Saving failed: ', error)
-        });
-    }
+    activePageId = currHash[0];
 
-    saveToDB = (outputData) => {
-        console.log('save to DB', [endpoint, outputData]);
-        
-        // save-doc-detail
-        axios.post(endpoint + '/save-doc-detail', {
-            documentation_breakdown_id: 2,
-            content: JSON.stringify(outputData),
-            created_by: 2,
-            _token: token
+    editorHelper.getData(activePageId)
+        .then(res => {
+            try {
+                activePageData = JSON.parse(res.data.data.content);
+            } catch (error) {
+                activePageData = {
+                    blocks: []
+                };
+            }
+
+            if (activePageData.blocks.length <= 0) {
+                activePageData = {"time":1619585697328,"blocks":[{"type":"paragraph","data":{"text":""}}],"version":"2.20.2"};
+            }
+
+            editor.isReady.then(() => {
+                // only show breakdown that doesn't have children
+                if (parseInt(breaddownChildren) == 0) {
+                    editor.render(activePageData);
+                }
+            })
         })
-        .then(res => this.render(res.data.data))
-        .catch(err => console.log(err));
-    }
-}
+});

@@ -129,4 +129,9 @@ class PostController extends Controller
     {
         return view('modules.documentation.docBreakdownx');
     }
+
+    public function docBreakdownx1(Request $req)
+    {
+        return view('modules.documentation.docBreakdownx1');
+    }
 }

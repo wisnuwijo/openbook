@@ -9,7 +9,6 @@
 
 @section('aside-right', 'Documentation')
 
-@include('modules.documentation.modal')
 @section('script')
 <script>
 function handleSubmit(e) {
