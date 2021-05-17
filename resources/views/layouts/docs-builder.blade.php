@@ -19,6 +19,18 @@
     <link rel="shortcut icon" type="image/png" href="img/favicon.png" /> </head>
     <link rel="icon" href="{{ url('/tabler/dist/img/document.png') }}" type="image/x-icon"/>
     <style>
+        .underline-input-title, .underline-input-title:focus {
+            margin-top: 20px;
+            font-size: 20px;
+            font-weight: bold;
+            width: 85%;
+            background-color: transparent !important;
+            border: 0 !important;
+            border-bottom: 1px solid #e2e2e2 !important;
+            padding: 10px !important;
+            outline: none;
+        }
+
         .underline-input, .underline-input:focus {
             width: 85%;
             margin-left: 20px;

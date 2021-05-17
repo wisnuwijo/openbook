@@ -4,13 +4,103 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Model\Topic;
+use App\Model\TopicMeta;
 use App\Model\Version;
+use App\Model\DocBreakdown;
+use App\Model\DocDetail;
+use App\User;
+use Auth;
 
 class PostController extends Controller
 {
     public function view()
     {
         return view('modules.documentation.index');
+    }
+
+    public function setting($id)
+    {
+        $id = base64_decode($id);
+        $topic = Topic::find($id);
+        $users = User::get();
+
+        if (!isset($topic)) return abort(404);
+
+        $getAssignees = TopicMeta::where('topic_id', $id)->get();
+        
+        $assignees = [];
+        for ($i=0; $i < count($getAssignees); $i++) { 
+            $assignees[] = $getAssignees[$i]->value;
+        }
+
+        $data = [
+            'topic' => $topic,
+            'assignees' => implode(',', $assignees),
+            'user' => $users,
+        ];
+
+        return view('modules.documentation.setting', $data);
+    }
+
+    public function updateTopic($id, $data)
+    {
+        $validator = $data->validate([
+            'name' => 'required|max:255',
+            'open_for_public' => 'required',
+        ]);
+
+        $topic = Topic::where('id', $id);
+        $updateTopic = $topic->update([
+            'name' => $data->name,
+            'open_for_public' => $data->open_for_public,
+            'updated_at' => now(),
+            'last_updated_by' => Auth::user()->id
+        ]);
+
+        $isAssigneesAvailable = isset($data->assignees) && count($data->assignees) > 0;
+        if (!$isAssigneesAvailable) {
+            // delete topic meta
+            TopicMeta::where([
+                ['topic_id', $id],
+                ['key', 'assignees']
+            ])
+            ->delete();
+        }
+
+        if ($isAssigneesAvailable) {
+            $resetAssignees = TopicMeta::where('topic_id', $id)->delete();
+            foreach ($data->assignees as $asg) {
+                TopicMeta::insert([
+                    'topic_id' => $id,
+                    'key' => 'assignees',
+                    'value' => $asg,
+                    'created_at' => now()
+                ]);
+            }
+        }
+
+        if (!$updateTopic) return false;
+        return true;
+    }
+
+    public function update($id, Request $req)
+    {
+        $id = base64_decode($id);
+        $validator = $req->validate([
+            'name' => 'required|max:255',
+            'open_for_public' => 'required',
+        ]);
+
+        $updateTopic = $this->updateTopic($id, $req);
+        if (!$updateTopic) return redirect()->back()->with([
+            'status-title' => 'Oops, something went wrong',
+            'status->subtitle' => 'Task was unsuccessful! Please try again'
+        ]);
+        
+        return redirect('/admin/documentation/view')->with([
+            'status-title' => 'Success',
+            'status-subtitle' => 'Topic updated',
+        ]);;
     }
 
     public function newTopicAndVersion()
@@ -59,6 +149,7 @@ class PostController extends Controller
 
         $newTopicId = $this->generateNewTopicId();
         $data["id"] = $newTopicId;
+        $data["created_at"] = now();
         $insertNewRecord = Topic::insert($data);
 
         if (!$insertNewRecord) return false;
@@ -80,6 +171,8 @@ class PostController extends Controller
         
         $newVersionId = $this->generateNewVersionId();
         $versionData["id"] = $newVersionId;
+        $versionData["created_at"] = now();
+
         $insertNewVersion = Version::insert($versionData);
 
         if (!$insertNewVersion) return false;
@@ -120,18 +213,64 @@ class PostController extends Controller
         ]);
     }
 
-    public function docBreakdown(Request $req)
+    public function gotoDocsBulder(Request $req)
     {
-        return view('modules.documentation.docBreakdown');
+        $topicId = base64_decode($req->topic_id);
+        $getLatestVersion = Version::where('topic_id', $topicId)
+                            ->orderBy('id','desc')
+                            ->first();
+                            
+        if (!isset($getLatestVersion)) return abort(404);
+
+        return redirect('/admin/documentation/doc-breakdown?version_id='. $getLatestVersion->id . '&topic_id=' . $topicId);
     }
 
-    public function docBreakdownx(Request $req)
+    public function docsBuilder(Request $req)
     {
-        return view('modules.documentation.docBreakdownx');
+        $topic = Topic::find($req->topic_id);
+        return view('modules.documentation.docsBuilder', [
+            'topic' => $topic
+        ]);
     }
 
-    public function docBreakdownx1(Request $req)
+    public function deleteTopic($topicId)
     {
-        return view('modules.documentation.docBreakdownx1');
+        $deleteTopicMeta = false;
+        $deleteTopic = Topic::find($topicId)->delete();
+        if ($deleteTopic) {
+            $deleteTopicMeta = TopicMeta::where('topic_id', $topicId)->delete();
+        }
+
+        if ($deleteTopic) return true;
+        return false;
+    }
+
+    public function deleteDocsBreakdownAndDetail($topicId)
+    {
+        $docsBreakdownIdList = [];
+        $docsBreakdown = DocBreakdown::where('topic_id', $topicId)->get();
+        for ($i=0; $i < count($docsBreakdown); $i++) { 
+            $docsBreakdownIdList[] = $docsBreakdown[$i]->id;
+        }
+
+        $deleteDocsBreakdown = DocBreakdown::where('topic_id', $topicId)->delete();
+        $deleteDocsDetail = DocDetail::whereIn('documentation_breakdown_id', $docsBreakdownIdList)->delete();
+
+        return $deleteDocsBreakdown;
+    }
+
+    public function deleteDocsDetail($topicId)
+    {
+        return DocDetail::where('topic_id', $topicId)->delete();
+    }
+
+    public function deleteDocs($id)
+    {
+        $deleteTopic = $this->deleteTopic($id);
+        $deleteDocs = $this->deleteDocsBreakdownAndDetail($id);
+
+        return response([
+            'status' => $deleteTopic
+        ]);
     }
 }

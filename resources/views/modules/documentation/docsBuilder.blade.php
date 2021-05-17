@@ -17,8 +17,7 @@
 <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
 @endsection
 
-@section('docs-title','Firecek')
-@section('title', 'Documentation')
+@section('title', 'Docs Builder - '. $topic->name)
 
 @section('content')
 <div id="docs-builder"></div>
@@ -29,9 +28,14 @@
 localStorage.setItem('_token', "{{ csrf_token() }}");
 // save laravel endpoint
 localStorage.setItem('endpoint', "{{ url('/api') }}");
+// save laravel initial topic name
+localStorage.setItem('initial-topic-name', "{{ $topic->name }}");
+// save laravel main url
+localStorage.setItem('main-url','{{ url("/admin/documentation/view") }}')
 </script>
 @endsection
 
 @section('script')
+<script src="https://cdn.jsdelivr.net/npm/lodash@4.17.10/lodash.min.js"></script>
 <script src="{{ url('js/main-editor.js') }}" type="module" user-id="{{ Auth::user()->id }}" endpoint="{{ url('/api') }}" token="{{ csrf_token() }}"></script>
 @endsection

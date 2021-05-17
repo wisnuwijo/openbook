@@ -1,5 +1,39 @@
 <?php
 
+function datetimeIdFormat($datetimeString) {
+    if ($datetimeString == '') return '';
+    if ($datetimeString == null) return '';
+
+    $explodeDatetime = explode(' ',$datetimeString);
+    $date = $explodeDatetime[0];
+    $time = $explodeDatetime[1];
+
+    $explodeDate = explode('-',$date);
+    $year = $explodeDate[0];
+
+    $months = [
+        '',
+        'Jan',
+        'Feb',
+        'Mar',
+        'Apr',
+        'May',
+        'Jun',
+        'Jul',
+        'Agt',
+        'Sep',
+        'Okt',
+        'Nov',
+        'Des'
+    ];
+
+    $month = $months[(int) $explodeDate[1]];
+    $day = $explodeDate[2];
+
+    $idDateFormat = $day . ' ' . $month . ' ' . $year . ' - ' . $time;
+    return $idDateFormat;
+}
+
 function menu() {
     $getMenu = DB::table('module')->where('parent_id', null)->get();
 

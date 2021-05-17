@@ -5,6 +5,7 @@ import Content from "./container/content.js";
 import Api from "./api/api.js";
 
 const token = localStorage.getItem('_token');
+const initialTopicName = localStorage.getItem('initial-topic-name');
 const api = new Api();
 
 class Index extends React.Component {
@@ -170,7 +171,7 @@ class Index extends React.Component {
 
     render() {        
         return <div className="page-wrapper toggled light-theme">
-            <Sidebar children={this.state.breakdownElement} />
+            <Sidebar children={this.state.breakdownElement} initialTopicName={initialTopicName} />
             <Content onVersionChange={this.handleVersionChange} onBreadcrumbChange={this.getBreakdownDataAndGenerateElement} versions={this.state.versions} activePageId={this.state.activePageId} />
         </div>
     }

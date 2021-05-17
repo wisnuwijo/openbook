@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Documentation')
+@section('title', 'Users')
 @section('css')
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.css">
 <style>
@@ -98,27 +98,27 @@ table.dataTable.no-footer, table.dataTable thead th, table.dataTable thead td {
 
                 <div class="card">
                   <div class="card-header">
-                    <h3 class="card-title">Topic List</h3>
+                    <h3 class="card-title">User List</h3>
                   </div>
                   <div class="table-responsive">
-                    <a href="{{ url('/admin/documentation/new-topic') }}" style="margin:20px;" class="btn btn-primary btn-md">
+                    <a href="{{ url('/admin/user-management/create') }}" style="margin:20px;" class="btn btn-primary btn-md">
                       <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-circle-plus" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                         <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                         <circle cx="12" cy="12" r="9"></circle>
                         <line x1="9" y1="12" x2="15" y2="12"></line>
                         <line x1="12" y1="9" x2="12" y2="15"></line>
                       </svg>
-                      Create new topic
+                      Create new user
                     </a>
                     
                     <table class="table card-table table-vcenter text-nowrap datatable">
                       <thead>
                         <tr>
                           <th class="w-1"></th>
-                          <th>Topic Name</th>
-                          <th>Last Update</th>
+                          <th>Name</th>
+                          <th>Role</th>
+                          <th>Email</th>
                           <th>Date Created</th>
-                          <th>Assignees</th>
                           <th></th>
                         </tr>
                       </thead>
@@ -163,54 +163,48 @@ table.dataTable.no-footer, table.dataTable thead th, table.dataTable thead td {
 @section('js')
 <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
 <script>
-var topicListTable = $('.datatable').DataTable({
-  "ajax": "{{ url('api/datatable/topic-list') }}",
+var userListTable = $('.datatable').DataTable({
+  "ajax": "{{ url('api/datatable/user-list') }}",
   "columns": [
-      { "data": "topic_id" },
-      { "data": "topic_name" },
-      { "data": "topic_last_update" },
-      { "data": "topic_date_created" },
-      { "data": "topic_assignees" },
+      { "data": "id" },
+      { "data": "name" },
+      { "data": "role_name" },
+      { "data": "email" },
+      { "data": "created_at" },
       { "data": "action_btn" }
   ]
 });
 
-topicListTable.on( 'order.dt search.dt', function () {
-    topicListTable.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
+userListTable.on( 'order.dt search.dt', function () {
+    userListTable.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
         cell.innerHTML = i+1;
     } );
 } ).draw();
 
 function deleteConfirm(id, name) {
-  $('#confirm-delete-prompt-text').text('Do you really want to remove ' + name + '? Once deleted, data cannot be restored');
-  $('.delete-confirm-btn-delete').attr('onclick', 'deleteTopic('+id+')');
+    $('#confirm-delete-prompt-text').text('Do you really want to remove ' + name + '? Once deleted, data cannot be restored');
+    $('.delete-confirm-btn-delete').attr('onclick', 'deleteUser('+id+')');
 }
 
-function deleteTopic(id) {
-  $.ajax({
-    url: '{{ url("/admin/documentation/delete") }}/' + id,
-    method: 'POST',
-    data: {
-      '_token': '{{ csrf_token() }}'
-    },
-    success: function (res) {
-      topicListTable.ajax.reload();
-      showMessage('Success', 'Topic deleted');
-    },
-    error: function (err) {
-      console.log('error');
-    }
-  })
-}
-
-function showMessage(title, subtitle) {
-  $('.javascript-msg').show();
-  $('.javascript-msg-title').text(title);
-  $('.javascript-msg-subtitle').text(subtitle);
-
-  setTimeout(function () {
-    $('.javascript-msg').hide();
-  }, 3000);
+function deleteUser(userId) {
+    $.ajax({
+        url: '{{ url("/admin/user-management/delete") }}' + '/' + userId,
+        method: 'POST',
+        data: {
+            '_token': '{{ csrf_token() }}'
+        },
+        success: function (res) {
+            var isDeleteSuccess = res.status;
+            if (isDeleteSuccess) {
+                userListTable.ajax.reload();
+            } else {
+                console.log(res);
+            }
+        },
+        error: function (err) {
+            console.log(err);
+        }
+    })
 }
 </script>
 @endsection

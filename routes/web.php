@@ -13,22 +13,51 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function() {
     Route::group(['prefix' => 'documentation'], function() {
         
         Route::get('/view','PostController@view');
+        Route::get('/setting/{id}','PostController@setting');
+        Route::post('/setting/{id}','PostController@update');
         
         Route::get('/new-topic','PostController@newTopicAndVersion');
         Route::post('/new-topic','PostController@newTopicAndVersionSave');
 
-        Route::get('/doc-breakdown','PostController@docBreakdown');
-        Route::get('/doc-breakdownx','PostController@docBreakdownx');
-        Route::get('/doc-breakdownx1','PostController@docBreakdownx1');
+        Route::get('/update','PostController@gotoDocsBulder');
+        Route::get('/doc-breakdown','PostController@docsBuilder');
 
-        Route::get('/react',function () {
-            return view('react');
-        });
+        Route::post('/delete/{id}','PostController@deleteDocs');
     });
+
+    Route::group(['prefix' => 'user-management'], function() {
+        
+        Route::get('/manage-permission','UserManagementController@managePermission');
+        Route::get('/view-user-list','UserManagementController@viewUserList');
+        
+        Route::get('/create','UserManagementController@create');
+        Route::get('/verify-email','UserManagementController@verifyEmail');
+        Route::post('/store','UserManagementController@storeUser');
+        
+        Route::get('/edit/{userId}','UserManagementController@edit');
+        Route::post('/update/{userId}','UserManagementController@updateUser');
+
+        Route::post('/delete/{userId}','UserManagementController@deleteUser');
+        
+        Route::group(['prefix' => 'permission'], function() {
+            Route::get('/{roleId}','UserManagementController@getPermission');
+            Route::post('/','UserManagementController@updatePermission');
+        });
+        
+    });
+    
     
 });
 
 Route::group(['prefix' => 'api', 'middleware' => 'auth'], function() {
+
+    Route::group(['prefix' => 'datatable'], function() {
+        
+        Route::get('topic-list','Api\TopicController@topicList');
+        Route::get('user-list','Api\UserController@userList');
+
+    });
+    
     Route::get('doc-breakdown','Api\DocumentationController@getDocBreakdown');
 
     Route::group(['prefix' => 'builder'], function() {
@@ -54,5 +83,6 @@ Route::group(['prefix' => 'api', 'middleware' => 'auth'], function() {
             Route::post('save','Api\DocumentationController@saveDocDetail');
         });
         
+        Route::post('topic/update','Api\DocumentationController@updateTopic');
     });
 });

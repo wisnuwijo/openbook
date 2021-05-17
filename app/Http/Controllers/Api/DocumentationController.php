@@ -7,6 +7,8 @@ use App\Http\Controllers\Controller;
 use App\Model\DocBreakdown;
 use App\Model\DocDetail;
 use App\Model\Version;
+use App\Model\Topic;
+use Auth;
 
 class DocumentationController extends Controller
 {
@@ -61,6 +63,8 @@ class DocumentationController extends Controller
         $insertDocBreakdown = DocBreakdown::insert($data);
         if (!$insertDocBreakdown) return response(['status' => $insertDocBreakdown], 500);
         
+        $this->refreshLastUpdate($req->topic_id);
+        
         return response(['status' => $insertDocBreakdown]);
     }
 
@@ -98,6 +102,9 @@ class DocumentationController extends Controller
         }
         
         if (!$action) return response(['status' => $insertDocDetail], 500);
+        
+        $currentBreadcrumb = DocBreakdown::where('id',$data['documentation_breakdown_id'])->first();
+        $this->refreshLastUpdate($currentBreadcrumb->topic_id);
         
         return response(['status' => $action]);
     }
@@ -145,9 +152,14 @@ class DocumentationController extends Controller
             'name' => $req->name
         ]);
 
-        if ($update) return response([
-            'status' => true
-        ]);
+        if ($update) {
+            $getTopicId = DocBreakdown::where('id', $id)->first();
+            $this->refreshLastUpdate($getTopicId->topic_id);
+
+            return response([
+                'status' => true
+            ]);
+        }
 
         return response([
             'status' => false
@@ -162,10 +174,15 @@ class DocumentationController extends Controller
 
         $id = $req->id;
 
-        $deleteBreadcrumb = DocBreakdown::find($id)->delete();
+        $currentBreadcrumb = DocBreakdown::find($id);
+        $deleteBreadcrumb = $currentBreadcrumb->delete();
         $deleteChildren = DocBreakdown::where('parent_id', $id)->delete();
 
-        if ($deleteBreadcrumb) return response(['status' => true]);
+        if ($deleteBreadcrumb) {
+            $this->refreshLastUpdate($currentBreadcrumb->topic_id);
+
+            return response(['status' => true]);
+        }
 
         return response(['status' => false]);
     }
@@ -193,6 +210,20 @@ class DocumentationController extends Controller
         ]);
     }
 
+    public function refreshLastUpdate($topicId)
+    {
+        if ($topicId == '') return false;
+        if ($topicId == null) return false;
+
+        $update = Topic::where('id', $topicId)
+                  ->update([
+                      'updated_at' => now(),
+                      'last_updated_by' => Auth::user()->id
+                  ]);
+
+        return $update;
+    }
+
     public function saveVersion(Request $req)
     {
         $validator = $req->validate([
@@ -208,6 +239,8 @@ class DocumentationController extends Controller
         ]);
 
         if ($insertVersion) {
+            $this->refreshLastUpdate($req->topic_id);
+
             $insertedVersion = Version::find($newId);
             return response(['status' => true, 'data' => $insertedVersion]);
         }
@@ -233,6 +266,24 @@ class DocumentationController extends Controller
         
         return response([
             'breakdown' => $getDocBreakdown
+        ]);
+    }
+
+    public function updateTopic(Request $req)
+    {
+        $validator = $req->validate([
+            'name' => 'required',
+            'topic_id' => 'required'
+        ]);
+
+        $update = Topic::where('id', $req->topic_id)->update([
+            'name' => $req->name,
+            'updated_at' => now(),
+            'last_updated_by' => Auth::user()->id
+        ]);
+
+        return response([
+            'status' => $update
         ]);
     }
 }
