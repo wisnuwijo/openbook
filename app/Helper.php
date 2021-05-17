@@ -1,5 +1,7 @@
 <?php
 
+use App\Model\RoleHasPermission;
+
 function datetimeIdFormat($datetimeString) {
     if ($datetimeString == '') return '';
     if ($datetimeString == null) return '';
@@ -70,6 +72,67 @@ function menu() {
     }
 
     echo $menu;
+}
+
+function hasPermission(String $permissionName, String $returnType = 'redirect') {
+    $permissionId = 0;
+    switch ($permissionName) {
+        case 'CREATE_NEW_TOPIC':
+            $permissionId = 1;
+            break;
+
+        case 'VIEW_TOPIC_LIST':
+            $permissionId = 2;
+            break;
+
+        case 'UPDATE_TOPIC_SETTING':
+            $permissionId = 3;
+            break;
+
+        case 'UPDATE_TOPIC_CONTENT':
+            $permissionId = 4;
+            break;
+
+        case 'DELETE_TOPIC':
+            $permissionId = 5;
+            break;
+
+        case 'VIEW_USER_LIST':
+            $permissionId = 6;
+            break;
+
+        case 'CREATE_NEW_USER':
+            $permissionId = 7;
+            break;
+
+        case 'UPDATE_USER':
+            $permissionId = 8;
+            break;
+
+        case 'DELETE_USER':
+            $permissionId = 9;
+            break;
+
+        case 'MANAGE_USER_PERMISSION':
+            $permissionId = 10;
+            break;
+        
+        default:
+            $permissionId = 0;
+            break;
+    }
+
+    $roleId = Auth::user()->role_id;
+    $checkPermission = RoleHasPermission::where([
+                            ['role_id', $roleId],
+                            ['permission_id', $permissionId]
+                        ])
+                        ->first();
+
+    if (!isset($checkPermission) && $returnType == 'redirect') return abort(403);
+    if (!isset($checkPermission) && $returnType == 'boolean') return false;
+
+    return true;
 }
 
 ?>

@@ -15,11 +15,20 @@ class PostController extends Controller
 {
     public function view()
     {
-        return view('modules.documentation.index');
+        hasPermission('VIEW_TOPIC_LIST');
+        $deleteTopicPermission = hasPermission('DELETE_TOPIC','boolean');
+        
+        $data = [
+            'delete_topic_permission' => $deleteTopicPermission
+        ];
+
+        return view('modules.documentation.index', $data);
     }
 
     public function setting($id)
     {
+        hasPermission('UPDATE_TOPIC_SETTING');
+
         $id = base64_decode($id);
         $topic = Topic::find($id);
         $users = User::get();
@@ -105,6 +114,8 @@ class PostController extends Controller
 
     public function newTopicAndVersion()
     {
+        hasPermission('CREATE_NEW_TOPIC');
+
         return view('modules.documentation.newTopic');
     }
 
@@ -227,6 +238,8 @@ class PostController extends Controller
 
     public function docsBuilder(Request $req)
     {
+        hasPermission('UPDATE_TOPIC_CONTENT');
+
         $topic = Topic::find($req->topic_id);
         return view('modules.documentation.docsBuilder', [
             'topic' => $topic

@@ -13,6 +13,8 @@ class UserManagementController extends Controller
 {
     public function managePermission()
     {
+        hasPermission('MANAGE_USER_PERMISSION');
+
         $role = Role::get();
         $permission = Permission::get();
 
@@ -76,11 +78,20 @@ class UserManagementController extends Controller
 
     public function viewUserList(Request $req)
     {
-        return view('modules.user-management.viewUserList');
+        hasPermission('VIEW_USER_LIST');
+        
+        $deleteUserPermission = hasPermission('DELETE_USER','boolean');
+        $data = [
+            'delete_user_permission' => $deleteUserPermission
+        ];
+
+        return view('modules.user-management.viewUserList', $data);
     }
 
     public function create()
     {
+        hasPermission('CREATE_NEW_USER');
+
         $role = Role::get();
         $data = [
             'role' => $role
@@ -157,6 +168,8 @@ class UserManagementController extends Controller
 
     public function edit($userId)
     {
+        hasPermission('UPDATE_USER');
+
         $userId = base64_decode($userId);
         
         $user = User::find($userId);

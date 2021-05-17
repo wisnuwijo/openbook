@@ -136,10 +136,10 @@ table.dataTable.no-footer, table.dataTable thead th, table.dataTable thead td {
           <div class="modal-status bg-danger"></div>
           <div class="modal-body text-center py-4">
             <svg xmlns="http://www.w3.org/2000/svg" class="icon mb-2 text-danger icon-lg" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 9v2m0 4v.01" /><path d="M5 19h14a2 2 0 0 0 1.84 -2.75l-7.1 -12.25a2 2 0 0 0 -3.5 0l-7.1 12.25a2 2 0 0 0 1.75 2.75" /></svg>
-            <h3>Are you sure?</h3>
+            <h3 class="confirm-delete-title"></h3>
             <div class="text-muted" id="confirm-delete-prompt-text"></div>
           </div>
-          <div class="modal-footer">
+          <div class="modal-footer confirm-delete-footer">
             <div class="w-100">
               <div class="row">
                 <div class="col">
@@ -182,8 +182,17 @@ topicListTable.on( 'order.dt search.dt', function () {
 } ).draw();
 
 function deleteConfirm(id, name) {
-  $('#confirm-delete-prompt-text').text('Do you really want to remove ' + name + '? Once deleted, data cannot be restored');
-  $('.delete-confirm-btn-delete').attr('onclick', 'deleteTopic('+id+')');
+  @if ($delete_topic_permission)
+    $('.confirm-delete-footer').show();
+    $('.confirm-delete-title').text('Are you sure?');
+    $('#confirm-delete-prompt-text').text('Do you really want to remove ' + name + '? Once deleted, data cannot be restored');
+    $('.delete-confirm-btn-delete').attr('onclick', 'deleteTopic('+id+')');
+  @else
+    $('.confirm-delete-footer').hide();
+    $('.confirm-delete-title').text('You are not allowed to delete this');
+    $('#confirm-delete-prompt-text').text('Contact your administrator to get access to delete the record');
+    $('.delete-confirm-btn-delete').removeAttr('onclick');
+  @endif
 }
 
 function deleteTopic(id) {
