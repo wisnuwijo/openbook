@@ -15,6 +15,7 @@ import Content from "./container/content.js";
 import Api from "./api/api.js";
 
 var token = localStorage.getItem('_token');
+var initialTopicName = localStorage.getItem('initial-topic-name');
 var api = new Api();
 
 var Index = function (_React$Component) {
@@ -206,7 +207,7 @@ var Index = function (_React$Component) {
             return React.createElement(
                 "div",
                 { className: "page-wrapper toggled light-theme" },
-                React.createElement(Sidebar, { children: this.state.breakdownElement }),
+                React.createElement(Sidebar, { children: this.state.breakdownElement, initialTopicName: initialTopicName }),
                 React.createElement(Content, { onVersionChange: this.handleVersionChange, onBreadcrumbChange: this.getBreakdownDataAndGenerateElement, versions: this.state.versions, activePageId: this.state.activePageId })
             );
         }

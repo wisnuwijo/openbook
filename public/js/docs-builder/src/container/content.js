@@ -1,6 +1,8 @@
 import Version from "../component/version.js";
 import Api from "../api/api.js";
 
+const mainUrl = localStorage.getItem('main-url');
+
 export default function Content(props) {
 
     const [breadcrumbData, setBreadcrumbData] = React.useState([]);
@@ -122,7 +124,13 @@ export default function Content(props) {
                         <div id="editorjs"></div>
                     </article>
                     <aside className="col-md-3 d-none d-md-block border-left">
-                        {/* aside right */}
+                        <b>Navigation</b>
+
+                        <ul>
+                            <li>
+                                <a href={mainUrl} className="btn" style={{ fontSize: '11pt', color:'#8e8e8e' }}>Back to main page</a>
+                            </li>
+                        </ul>
                     </aside>
                 </div>
             </div>

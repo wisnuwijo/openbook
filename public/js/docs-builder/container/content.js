@@ -5,6 +5,8 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 import Version from "../component/version.js";
 import Api from "../api/api.js";
 
+var mainUrl = localStorage.getItem('main-url');
+
 export default function Content(props) {
     var _React$useState = React.useState([]),
         _React$useState2 = _slicedToArray(_React$useState, 2),
@@ -211,7 +213,28 @@ export default function Content(props) {
                     { className: "main-content col-md-9 pr-lg-5" },
                     React.createElement("div", { id: "editorjs" })
                 ),
-                React.createElement("aside", { className: "col-md-3 d-none d-md-block border-left" })
+                React.createElement(
+                    "aside",
+                    { className: "col-md-3 d-none d-md-block border-left" },
+                    React.createElement(
+                        "b",
+                        null,
+                        "Navigation"
+                    ),
+                    React.createElement(
+                        "ul",
+                        null,
+                        React.createElement(
+                            "li",
+                            null,
+                            React.createElement(
+                                "a",
+                                { href: mainUrl, className: "btn", style: { fontSize: '11pt', color: '#8e8e8e' } },
+                                "Back to main page"
+                            )
+                        )
+                    )
+                )
             )
         )
     );

@@ -35,5 +35,9 @@
                 </div>
             </div>
         </div>
+        <a class="btn btn-primary" href="{{ url('admin/documentation/new-topic') }}">Create New Topic</a>
+        <div class="btn-group">
+            <a class="btn btn-info" href="{{ url('admin/documentation/view') }}">View Documentation List</a>
+        </div>
     </div>
 @endsection

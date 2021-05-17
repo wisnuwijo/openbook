@@ -25,7 +25,6 @@
     <link href="{{ url('/tabler/dist/libs/fullcalendar/list/main.min.css') }}" rel="stylesheet"/>
     <link href="{{ url('/tabler/dist/libs/flatpickr/dist/flatpickr.min.css') }}" rel="stylesheet"/>
     <link href="{{ url('/tabler/dist/libs/nouislider/distribute/nouislider.min.css') }}" rel="stylesheet"/>
-    <link href="https://api.mapbox.com/mapbox-gl-js/v1.8.0/mapbox-gl.css') }}" rel="stylesheet"/>
     <!-- Tabler Core -->
     <link href="{{ url('/tabler/dist/css/tabler.min.css') }}" rel="stylesheet"/>
     <!-- Tabler Plugins -->
@@ -33,9 +32,15 @@
     <link href="{{ url('/tabler/dist/css/tabler-payments.min.css') }}" rel="stylesheet"/>
     <link href="{{ url('/tabler/dist/css/tabler-buttons.min.css') }}" rel="stylesheet"/>
     <link href="{{ url('/tabler/dist/css/demo.min.css') }}" rel="stylesheet"/>
+    @yield('css')
     <style>
       body {
       	display: none;
+      }
+
+      .btn-close {
+        background-color: red;
+        border: 0px;
       }
     </style>
   </head>
@@ -47,7 +52,7 @@
             <span class="navbar-toggler-icon"></span>
           </button>
           <a href="." class="navbar-brand navbar-brand-autodark d-none-navbar-horizontal pr-0 pr-md-3">
-            Devdocs
+            {{ env('APP_NAME') }}
           </a>
           <div class="navbar-nav flex-row order-md-last">
             <div class="nav-item dropdown">
@@ -95,7 +100,7 @@
             <div class="row text-center align-items-center flex-row-reverse">
               <div class="col-12 col-lg-auto mt-3 mt-lg-0">
                 Copyright © <?php echo date('Y'); ?>
-                <a href="." class="link-secondary">Devdocs</a>.
+                <a href="." class="link-secondary">{{ env('APP_NAME') }}</a>.
                 All rights reserved.
               </div>
             </div>
@@ -104,12 +109,13 @@
       </div>
     </div>
     <!-- Libs JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous"></script>
     <script src="{{ url('/tabler/dist/libs/bootstrap/dist/js/bootstrap.bundle.min.js') }}"></script>
-    <script src="{{ url('/tabler/dist/libs/jquery/dist/jquery.slim.min.js') }}"></script>
     <!-- Tabler Core -->
     <script src="{{ url('/tabler/dist/js/tabler.min.js') }}"></script>
     <script>
       document.body.style.display = "block"
     </script>
+    @yield('js')
   </body>
 </html>

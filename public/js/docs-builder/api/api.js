@@ -79,6 +79,17 @@ var Api = function Api() {
             return err;
         });
     };
+
+    this.updateTopic = function (topicId, name) {
+        return axios.post(endpoint + '/builder/topic/update', {
+            topic_id: topicId,
+            name: name
+        }).then(function (res) {
+            return res.data;
+        }).catch(function (err) {
+            return err;
+        });
+    };
 };
 
 export default Api;

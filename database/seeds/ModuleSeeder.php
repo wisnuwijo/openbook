@@ -52,14 +52,14 @@ class ModuleSeeder extends Seeder
 
         DB::table('module')->insert([
             'name' => 'Create new user',
-            'url' => '/admin/user-management/new-user',
+            'url' => '/admin/user-management/create',
             'parent_id' => 3,
             'created_at' => now()
         ]);
 
         DB::table('module')->insert([
-            'name' => 'Manage access',
-            'url' => '/admin/user-management/manage-access',
+            'name' => 'Manage permission',
+            'url' => '/admin/user-management/manage-permission',
             'parent_id' => 3,
             'created_at' => now()
         ]);

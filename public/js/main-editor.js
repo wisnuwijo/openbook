@@ -38,6 +38,7 @@ const editorHelper = new EditorHelper();
 
 let activePageId = 0;
 let activePageData = {};
+let initialBlocks = {};
 
 const editor = new EditorJS({
     holder: 'editorjs',
@@ -60,9 +61,15 @@ const editor = new EditorJS({
     data: activePageData,
     onChange: () => {
         editor.save().then((outputData) => {
-            // console.log('currHash', activePageId);
-            // console.log('Article data: ', outputData)
-            editorHelper.saveToDB(outputData, activePageId);
+            const dataAlreadyBeenChanged = !(_.isEqual(initialBlocks.blocks, outputData.blocks));
+            console.log('currHash', activePageId);
+            console.log('Article data: ', outputData);
+
+            // console.log('initialBlocks', initialBlocks);
+            // console.log('activePageData', activePageData);
+            // console.log('compareEditorData', dataAlreadyBeenChanged);
+
+            if (dataAlreadyBeenChanged) editorHelper.saveToDB(outputData, activePageId);
         }).catch((error) => {
             // console.log('Saving failed: ', error)
         });
@@ -92,6 +99,8 @@ window.addEventListener("hashchange", function () {
             editor.isReady.then(() => {
                 // only show breakdown that doesn't have children
                 if (parseInt(breaddownChildren) == 0) {
+                    initialBlocks = activePageData;
+
                     editor.render(activePageData);
                 }
             })

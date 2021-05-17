@@ -66,6 +66,15 @@ class Api {
             .then(res => res.data)
             .catch(err => err);
     }
+
+    updateTopic = (topicId, name) => {
+        return axios.post(endpoint + '/builder/topic/update', {
+            topic_id: topicId,
+            name: name
+        })
+            .then(res => res.data)
+            .catch(err => err);
+    }
 }
 
 export default Api;
