@@ -81,7 +81,7 @@ $(function() {
 function validateUrl(value) {
     // only allow alphabets, number and dash
     var charRegExp = /^[a-zA-Z0-9-]+$/;
-    if (value.search(charRegExp) != 0) {
+    if (value.search(charRegExp) != 0 || value == 'admin') {
         return false;
     }
  
@@ -95,11 +95,11 @@ $('.topic-url').change(function (e) {
         $('.topic-url').addClass('is-invalid');
         $('.topic-url-error-msg')
             .show()
-            .text('You only allowed to use alphabet (a-z/A-Z), number (0-9) and dash (-) symbol');
+            .text('You only allowed to use alphabet (a-z/A-Z), number (0-9), dash (-) symbol and do not use reserved word (admin)');
         
         return;
     }
-    
+
     $.ajax({
         url: '{{ url("/admin/documentation/validate-topic-url") }}',
         method: 'GET',
