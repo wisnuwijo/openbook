@@ -116,6 +116,7 @@ table.dataTable.no-footer, table.dataTable thead th, table.dataTable thead td {
                         <tr>
                           <th class="w-1"></th>
                           <th>Topic Name</th>
+                          <th>Created By</th>
                           <th>Last Update</th>
                           <th>Date Created</th>
                           <th>Assignees</th>
@@ -168,6 +169,7 @@ var topicListTable = $('.datatable').DataTable({
   "columns": [
       { "data": "topic_id" },
       { "data": "topic_name" },
+      { "data": "topic_created_by" },
       { "data": "topic_last_update" },
       { "data": "topic_date_created" },
       { "data": "topic_assignees" },

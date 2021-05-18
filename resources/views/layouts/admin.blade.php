@@ -57,14 +57,14 @@
           <div class="navbar-nav flex-row order-md-last">
             <div class="nav-item dropdown">
               <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-toggle="dropdown">
-                <span class="avatar" style=""></span>
+                <span class="avatar" style="background-image: url('{{ url(Auth::user()->profile_picture) }}')"></span>
                 <div class="d-none d-xl-block pl-2">
                   <div>{{ Auth::user()->name }}</div>
-                  <div class="mt-1 small text-muted">Contributor</div>
+                  <div class="mt-1 small text-muted">{{ Auth::user()->role->name }}</div>
                 </div>
               </a>
               <div class="dropdown-menu dropdown-menu-right">
-                <a class="dropdown-item" href="#">
+                <a class="dropdown-item" href="{{ url('/admin/profile') }}">
                   Profile
                 </a>
                 <div class="dropdown-divider"></div>

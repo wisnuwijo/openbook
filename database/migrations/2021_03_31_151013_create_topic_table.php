@@ -17,6 +17,7 @@ class CreateTopicTable extends Migration
             $table->bigIncrements('id');
             $table->string('name', 200);
             $table->bigInteger('open_for_public')->default(0);
+            $table->integer('created_by');
             $table->integer('last_updated_by');
             $table->timestamps();
         });

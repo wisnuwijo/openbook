@@ -46,6 +46,15 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function() {
         
     });
     
+    Route::group(['prefix' => 'profile'], function() {
+        
+        Route::get('/','ProfileController@index');
+
+        Route::post('/update/avatar','ProfileController@updateAvatar');
+        Route::post('/update/email','ProfileController@updateEmail');
+        Route::post('/update/name','ProfileController@updateName');
+        Route::post('/update/password','ProfileController@updatePassword');
+    });
     
 });
 

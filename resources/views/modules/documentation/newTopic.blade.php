@@ -30,7 +30,7 @@
                             @csrf
                             <div class="form-group">
                                 <label class="form-label required">Topic name</label>
-                                <input type="text" class="form-control" name="name" placeholder="Example : Firecek" required>
+                                <input type="text" class="form-control" name="name" placeholder="Example : App 1" required>
                             </div>
                             <br/>
                             <div class="form-group">

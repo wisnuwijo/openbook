@@ -161,6 +161,7 @@ class PostController extends Controller
         $newTopicId = $this->generateNewTopicId();
         $data["id"] = $newTopicId;
         $data["created_at"] = now();
+        $data["created_by"] = Auth::user()->id;
         $insertNewRecord = Topic::insert($data);
 
         if (!$insertNewRecord) return false;

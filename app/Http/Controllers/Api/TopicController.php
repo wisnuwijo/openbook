@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Model\TopicMeta;
 use App\Model\Topic;
 use App\User;
+use Auth;
 
 class TopicController extends Controller
 {
@@ -15,7 +16,27 @@ class TopicController extends Controller
     {
         $topic = [];
 
-        $getTopic = Topic::get();
+        $isAdmin = Auth::user()->role_id == 1;
+        if ($isAdmin) {
+            $getTopic = Topic::get();
+        } else {
+            $gatherTopic = TopicMeta::where([
+                                ['key', 'assignees'],
+                                ['value', Auth::user()->id]
+                            ])
+                            ->get();
+
+            $topicIdList = [];
+            for ($i=0; $i < count($gatherTopic); $i++) { 
+                $currElement = $gatherTopic[$i];
+                $topicIdList[] = $currElement->topic_id;
+            }
+
+            $getTopic = Topic::where('created_by', Auth::user()->id)
+                        ->orWhereIn('id', $topicIdList)
+                        ->get();
+        }
+        
         if (count($getTopic) > 0) {
             foreach ($getTopic as $gt) {
                 $assignees = [];
@@ -42,6 +63,7 @@ class TopicController extends Controller
                 
                 $topic[] = [
                     'topic_name' => $gt->name,
+                    'topic_created_by' => $gt->user->name,
                     'topic_last_update' => datetimeIdFormat($gt->updated_at),
                     'topic_date_created' => datetimeIdFormat($gt->created_at),
                     'topic_assignees' => implode(',', $assignees),
