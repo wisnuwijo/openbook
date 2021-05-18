@@ -16,6 +16,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function() {
         Route::get('/setting/{id}','PostController@setting');
         Route::post('/setting/{id}','PostController@update');
         
+        Route::get('/validate-topic-url','PostController@validateTopicUrl');
         Route::get('/new-topic','PostController@newTopicAndVersion');
         Route::post('/new-topic','PostController@newTopicAndVersionSave');
 

@@ -34,6 +34,12 @@
                             </div>
                             <br/>
                             <div class="form-group">
+                                <label class="form-label required">Topic URL</label>
+                                <input type="text" class="form-control topic-url" name="url" placeholder="Example : app1" required>
+                                <div class="invalid-feedback topic-url-error-msg"></div>
+                            </div>
+                            <br/>
+                            <div class="form-group">
                                 <label class="form-label required">Initial Version</label>
                                 <input type="text" class="form-control" name="version_name" placeholder="Example : 1.0" required>
                             </div>
@@ -48,11 +54,66 @@
                                 </div>
                             </div>
                             <br/>
-                            <button type="submit" class="btn btn-primary">Next Step</button>
+                            <input type="submit" class="btn btn-primary" value="Next Step">
                         </form>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+@endsection
+
+@section('js')
+<script>
+function validateUrl(value) {
+    // only allow alphabets, number and dash
+    var charRegExp = /^[a-zA-Z0-9-]+$/;
+    if (value.search(charRegExp) != 0) {
+        return false;
+    }
+ 
+    return true;
+}
+
+$('.topic-url').change(function (e) {
+    var validateUrlSymbol = validateUrl($('.topic-url').val());
+    if (!validateUrlSymbol) {
+        $('input[type=submit]').attr('disabled','');
+        $('.topic-url').addClass('is-invalid');
+        $('.topic-url-error-msg')
+            .show()
+            .text('You only allowed to use alphabet (a-z/A-Z), number (0-9) and dash (-) symbol');
+        
+        return;
+    }
+    
+    $.ajax({
+        url: '{{ url("/admin/documentation/validate-topic-url") }}',
+        method: 'GET',
+        data: {
+            'url' : $(this).val()
+        },
+        success: function (res) {
+            if (!res.status) {
+                $('input[type=submit]').attr('disabled','');
+                $('.topic-url').addClass('is-invalid');
+                $('.topic-url-error-msg')
+                    .show()
+                    .text('URL is taken, please use another');
+
+                return;
+            }
+
+            $('input[type=submit]').removeAttr('disabled');
+            $('.topic-url').removeClass('is-invalid');
+            $('.topic-url-error-msg')
+                .hide()
+                .text('');
+        },
+        error: function (err) {
+            console.log(err);
+        }
+    });
+})
+</script>
 @endsection

@@ -21,6 +21,12 @@
                             </div>
                             <br/>
                             <div class="form-group">
+                                <label class="form-label required">Topic URL</label>
+                                <input type="text" class="form-control topic-url" name="url" placeholder="Example : app1" value="{{ $topic->url }}" required>
+                                <div class="invalid-feedback topic-url-error-msg"></div>
+                            </div>
+                            <br/>
+                            <div class="form-group">
                                 <label class="form-label">Assignees</label>
                                 <select class="form-control assignees" name="assignees[]" multiple="multiple">
                                     @foreach($user as $usr)
@@ -39,7 +45,7 @@
                                 </div>
                             </div>
                             <br/>
-                            <button type="submit" class="btn btn-primary">Save</button>
+                            <input type="submit" class="btn btn-primary" value="Save">
                         </form>
                     </div>
                 </div>
@@ -70,6 +76,59 @@ $(function() {
 
     $('.assignees').select2();
     $('.assignees').val(assigneesArr).trigger('change');
+})
+
+function validateUrl(value) {
+    // only allow alphabets, number and dash
+    var charRegExp = /^[a-zA-Z0-9-]+$/;
+    if (value.search(charRegExp) != 0) {
+        return false;
+    }
+ 
+    return true;
+}
+
+$('.topic-url').change(function (e) {
+    var validateUrlSymbol = validateUrl($('.topic-url').val());
+    if (!validateUrlSymbol) {
+        $('input[type=submit]').attr('disabled','');
+        $('.topic-url').addClass('is-invalid');
+        $('.topic-url-error-msg')
+            .show()
+            .text('You only allowed to use alphabet (a-z/A-Z), number (0-9) and dash (-) symbol');
+        
+        return;
+    }
+    
+    $.ajax({
+        url: '{{ url("/admin/documentation/validate-topic-url") }}',
+        method: 'GET',
+        data: {
+            'url' : $(this).val(),
+            'topic_id': '{{ $topic->id }}',
+            'exception': '{{ $topic->url }}'
+        },
+        success: function (res) {
+            if (!res.status) {
+                $('input[type=submit]').attr('disabled','');
+                $('.topic-url').addClass('is-invalid');
+                $('.topic-url-error-msg')
+                    .show()
+                    .text('URL is taken, please use another');
+
+                return;
+            }
+
+            $('input[type=submit]').removeAttr('disabled');
+            $('.topic-url').removeClass('is-invalid');
+            $('.topic-url-error-msg')
+                .hide()
+                .text('');
+        },
+        error: function (err) {
+            console.log(err);
+        }
+    });
 })
 </script>
 @endsection

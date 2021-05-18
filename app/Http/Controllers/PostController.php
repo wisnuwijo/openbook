@@ -55,12 +55,14 @@ class PostController extends Controller
     {
         $validator = $data->validate([
             'name' => 'required|max:255',
+            'url' => 'required|max:200',
             'open_for_public' => 'required',
         ]);
 
         $topic = Topic::where('id', $id);
         $updateTopic = $topic->update([
             'name' => $data->name,
+            'url' => $data->url,
             'open_for_public' => $data->open_for_public,
             'updated_at' => now(),
             'last_updated_by' => Auth::user()->id
@@ -97,6 +99,7 @@ class PostController extends Controller
         $id = base64_decode($id);
         $validator = $req->validate([
             'name' => 'required|max:255',
+            'url' => 'required|max:200',
             'open_for_public' => 'required',
         ]);
 
@@ -110,6 +113,31 @@ class PostController extends Controller
             'status-title' => 'Success',
             'status-subtitle' => 'Topic updated',
         ]);;
+    }
+
+    public function validateTopicUrl(Request $req)
+    {
+        $req->validate([
+            'url' => 'required'
+        ]);
+
+        $whereArr = [
+            ['url', $req->url]
+        ];
+
+        $isFromEditUrlForm = isset($req->exception);
+        if ($isFromEditUrlForm) {
+            $whereArr = [
+                ['url', $req->url],
+                ['url','!=', $req->exception]
+            ];
+        }
+
+        $validate = Topic::where($whereArr)->first();
+
+        return response([
+            'status' => !isset($validate)
+        ]);
     }
 
     public function newTopicAndVersion()
@@ -150,11 +178,13 @@ class PostController extends Controller
     {
         $validator = $req->validate([
             'name' => 'required|max:255',
+            'url' => 'required|max:200',
             'open_for_public' => 'required',
         ]);
 
         $data = $req->only([
             'name',
+            'url',
             'open_for_public'
         ]);
 
@@ -196,6 +226,7 @@ class PostController extends Controller
     {
         $validator = $req->validate([
             'name' => 'required|max:255',
+            'url' => 'required',
             'version_name' => 'required',
             'open_for_public' => 'required',
         ]);
