@@ -5,13 +5,13 @@
     <meta charset="utf-8">
     
     <!--====== Title ======-->
-    <title>Smash - Bootstrap Business Template</title>
+    <title>{{ env('APP_NAME') }} - Documentation tool</title>
     
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!--====== Favicon Icon ======-->
-    <link rel="shortcut icon" href="{{ asset('smash/images/favicon.png') }}" type="image/png">
+    <link rel="icon" href="{{ url('/tabler/dist/img/document.png') }}" type="image/x-icon"/>
         
     <!--====== Magnific Popup CSS ======-->
     <link rel="stylesheet" href="{{ asset('smash/css/magnific-popup.css') }}">
@@ -69,36 +69,6 @@
             </div> <!-- row -->
             <div class="row justify-content-center">
                 @yield('topic-list')
-                {{--  <div class="col-lg-4 col-md-7 col-sm-9">
-                    <div class="single-features mt-40">
-                        <div class="features-title-icon d-flex justify-content-between">
-                            <h4 class="features-title"><a href="#">Website Design</a></h4>
-                            <div class="features-icon">
-                                <i class="lni lni-layout"></i>
-                                <img class="shape" src="{{ asset('smash/images/f-shape-1.svg') }}" alt="Shape">
-                            </div>
-                        </div>
-                        <div class="features-content">
-                            <p class="text">Short description for the ones who look for something new. Short description for the ones who look for something new.</p>
-                            <a class="features-btn" href="#">LEARN MORE</a>
-                        </div>
-                    </div> <!-- single features -->
-                </div>
-                <div class="col-lg-4 col-md-7 col-sm-9">
-                    <div class="single-features mt-40">
-                        <div class="features-title-icon d-flex justify-content-between">
-                            <h4 class="features-title"><a href="#">Digital Marketing</a></h4>
-                            <div class="features-icon">
-                                <i class="lni lni-bolt"></i>
-                                <img class="shape" src="{{ asset('smash/images/f-shape-1.svg') }}" alt="Shape">
-                            </div>
-                        </div>
-                        <div class="features-content">
-                            <p class="text">Short description for the ones who look for something new. Short description for the ones who look for something new.</p>
-                            <a class="features-btn" href="#">LEARN MORE</a>
-                        </div>
-                    </div> <!-- single features -->
-                </div>  --}}
             </div> <!-- row -->
         </div> <!-- container -->
         <br>
