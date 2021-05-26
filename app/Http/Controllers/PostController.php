@@ -318,4 +318,39 @@ class PostController extends Controller
             'status' => $deleteTopic
         ]);
     }
+
+    public function chooseDocs()
+    {
+        if (Auth::check()) {
+            $topicList = Topic::get();
+        } else {
+            $topicList = Topic::where('open_for_public', 1)->get();
+        }
+
+        $data = [
+            'topic_list' => $topicList
+        ];
+
+        return view('public.index', $data);
+    }
+
+    public function publicDocs($topicUrl)
+    {
+        $topic = Topic::where('url', $topicUrl)->first();
+        if (!isset($topic)) return abort(404);
+        if ($topic->open_for_public == 0 && !Auth::check()) return abort(403, 'This documentation is restricted from public');
+
+        $versionList = Version::where('topic_id', $topic->id)->get();
+        $getLatestVersion = Version::where('topic_id', $topic->id)
+                            ->orderBy('id','desc')
+                            ->first();
+
+        $data = [
+            'topic' => $topic,
+            'version_list' => $versionList,
+            'latest_version' => isset($getLatestVersion) ? $getLatestVersion->id : 0
+        ];
+
+        return view('public.topic', $data);
+    }
 }

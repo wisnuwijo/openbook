@@ -12,9 +12,10 @@
 <script src="https://cdn.jsdelivr.net/npm/@editorjs/list@latest"></script>
 
 <!-- Load React. -->
+<!-- Note: at development, replace "production.min.js" with "development.js". -->
 <!-- Note: when deploying, replace "development.js" with "production.min.js". -->
-<script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
-<script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
+<script src="https://unpkg.com/react@17/umd/react.production.min.js" crossorigin></script>
+<script src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js" crossorigin></script>
 @endsection
 
 @section('title', 'Docs Builder - '. $topic->name)

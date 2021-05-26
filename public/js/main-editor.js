@@ -29,6 +29,15 @@ class EditorHelper {
     }
 }
 
+var notification = {
+    show: function (msg = '') {
+        $('.editor-status').show().text(msg);
+    },
+    hide: function() {
+        $('.editor-status').hide();
+    }
+}
+
 const editorFile = $('script[src*=main-editor]');
 const endpoint = editorFile.attr('endpoint');
 const token = editorFile.attr('token');
@@ -60,25 +69,32 @@ const editor = new EditorJS({
     },
     data: activePageData,
     onChange: () => {
+        notification.show('Saving ...');
         editor.save().then((outputData) => {
             const dataAlreadyBeenChanged = !(_.isEqual(initialBlocks.blocks, outputData.blocks));
+            const isActivePageIdValid = activePageData.active_page_id == activePageId;
             console.log('currHash', activePageId);
-            console.log('Article data: ', outputData);
+            // console.log('Article data: ', outputData);
 
             // console.log('initialBlocks', initialBlocks);
-            // console.log('activePageData', activePageData);
+            console.log('activePageData', activePageData);
             // console.log('compareEditorData', dataAlreadyBeenChanged);
 
-            if (dataAlreadyBeenChanged) editorHelper.saveToDB(outputData, activePageId);
+            if (dataAlreadyBeenChanged && isActivePageIdValid) editorHelper.saveToDB(outputData, activePageId);
+            
+            setTimeout(function () {
+                notification.show('Successfully saved');
+            }, 500);
         }).catch((error) => {
             // console.log('Saving failed: ', error)
+            notification.show('Failed! Something went wrong');
         });
     }
 });
 
 window.addEventListener("hashchange", function () {
     let currHash = location.hash.substring(1).split('-');
-    let breaddownChildren = currHash[1];
+    let breakdownChildren = currHash[1];
 
     activePageId = currHash[0];
 
@@ -96,9 +112,11 @@ window.addEventListener("hashchange", function () {
                 activePageData = {"time":1619585697328,"blocks":[{"type":"paragraph","data":{"text":""}}],"version":"2.20.2"};
             }
 
+            activePageData.active_page_id = activePageId;
+
             editor.isReady.then(() => {
                 // only show breakdown that doesn't have children
-                if (parseInt(breaddownChildren) == 0) {
+                if (parseInt(breakdownChildren) == 0) {
                     initialBlocks = activePageData;
 
                     editor.render(activePageData);

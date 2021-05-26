@@ -84,6 +84,25 @@ class DocumentationController extends Controller
         ]);
     }
 
+    public function getDocDetailWithUrl(Request $req)
+    {
+        $validator = $req->validate([
+            'breakdown_url' => 'required'
+        ]);
+
+        $data = request(['breakdown_url']);
+        $breakdown = DocBreakdown::where('link', $data['breakdown_url'])->first();
+
+        $detail = null;
+        if (isset($breakdown)) $detail = DocDetail::where('documentation_breakdown_id', $breakdown->id)->first();
+
+        if (!isset($breakdown) || !isset($detail)) return response(['data' => (Object) []]);
+
+        return response([
+            'data' => $detail
+        ]);
+    }
+
     public function saveDocDetail(Request $req)
     {
         $data = request(['documentation_breakdown_id','content','created_by']);
@@ -264,7 +283,7 @@ class DocumentationController extends Controller
 
         $getDocBreakdown = $this->getBreakdownHierarchy($req->version_id, $req->topic_id, $getParentBreakdown);
         
-        return response([
+        return response()->json([
             'breakdown' => $getDocBreakdown
         ]);
     }

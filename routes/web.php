@@ -1,10 +1,6 @@
 <?php
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
-Auth::routes();
+Auth::routes(['register' => false]);
 
 Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function() {
     
@@ -95,4 +91,14 @@ Route::group(['prefix' => 'api', 'middleware' => 'auth'], function() {
         
         Route::post('topic/update','Api\DocumentationController@updateTopic');
     });
+});
+
+// public area
+Route::get('/', 'PostController@chooseDocs');
+Route::get('/{topicUrl}', 'PostController@publicDocs');
+
+Route::group(['prefix' => 'public-api'], function() {    
+    Route::get('breakdown/get','Api\DocumentationController@getBreakdown');
+    Route::get('breakdown-content','Api\DocumentationController@getDocDetailWithUrl');
+
 });

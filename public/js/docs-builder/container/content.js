@@ -216,6 +216,8 @@ export default function Content(props) {
                 React.createElement(
                     "aside",
                     { className: "col-md-3 d-none d-md-block border-left" },
+                    React.createElement("div", { className: "editor-status", style: { display: 'none' } }),
+                    React.createElement("hr", null),
                     React.createElement(
                         "b",
                         null,

@@ -72,6 +72,23 @@
             outline: none;
             width: '50px';
         }
+
+        .editor-status {
+            width: fit-content;
+            padding: 8px;
+            text-transform: capitalize;
+            font-weight: 800;
+            font-style: italic;
+            color: #9b9d9e;
+            background: #eee;
+            border-radius: 20px;
+            font-size: small;
+        }
+
+        .sidebar-submenu > ul > li {
+            margin-left: 30px;
+            border-left: 1px solid #DAD7E0;
+        }
     </style>
 
     <!-- page-wrapper -->

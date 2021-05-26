@@ -12,9 +12,11 @@
   .light-theme .sidebar-wrapper a:not(.dropdown-item):hover,
   .light-theme .sidebar-wrapper .sidebar-menu li.active > a {
     color: #424242;
-    -webkit-box-shadow: 0 3px 15px rgba(36, 37, 38, 0.08);
+    font-weight: 700;
+    /* -webkit-box-shadow: 0 3px 15px rgba(36, 37, 38, 0.08);
     box-shadow: 0 3px 15px rgba(36, 37, 38, 0.08);
-    background: #fff; }
+    background: #fff;  */
+  }
   .light-theme .sidebar-wrapper .sidebar-search input.search-menu,
   .light-theme .sidebar-wrapper .sidebar-search .input-group-text {
     background-color: #fff;

@@ -166,6 +166,10 @@ var Index = function (_React$Component) {
                 breakdownElement: el
             }));
         }, _this.handleAddHeadingSubmit = function (formData) {
+            if (formData.version_id !== undefined) {
+                formData.version_id = _this.state.activeVersionId;
+            }
+
             event.preventDefault();
 
             api.saveDocBreakdown(formData).then(function (res) {

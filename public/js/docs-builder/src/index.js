@@ -134,6 +134,10 @@ class Index extends React.Component {
     }
 
     handleAddHeadingSubmit = (formData) => {
+        if (formData.version_id !== undefined) {
+            formData.version_id = this.state.activeVersionId;
+        }
+        
         event.preventDefault();
 
         api.saveDocBreakdown(formData)

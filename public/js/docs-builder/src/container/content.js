@@ -124,6 +124,8 @@ export default function Content(props) {
                         <div id="editorjs"></div>
                     </article>
                     <aside className="col-md-3 d-none d-md-block border-left">
+                        <div className="editor-status" style={{ display:'none' }}></div>
+                        <hr/>
                         <b>Navigation</b>
 
                         <ul>

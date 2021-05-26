@@ -1,5 +1,5 @@
 @section('title', 'Access denied')
-@extends('layouts.admin')
+@extends('layouts.error')
 @section('css')
 <style>
 .empty-img {
@@ -26,14 +26,14 @@
             <img src="{{ url('img/access-denied.svg') }}" height="128" alt="">
         </div>
         <p class="empty-title">
+            Access denied
+        </p>
+        <p class="empty-subtitle text-muted">
             @if ($exception->getMessage() != '')
                 {{ $exception->getMessage() }}
             @else
-                Access denied
+                Contact your administrator to get access
             @endif
-        </p>
-        <p class="empty-subtitle text-muted">
-        Contact your administrator to get access
         </p>
         </div>
     </div>

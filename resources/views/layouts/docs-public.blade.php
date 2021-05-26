@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -16,21 +15,45 @@
     <link rel="stylesheet" href="../node_modules/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.css"> -->
     <link rel="stylesheet" href="{{ url('/docs/css/main.css') }}">
     <link rel="stylesheet" href="{{ url('/docs/css/sidebar-themes.css') }}">
-    <link rel="shortcut icon" type="image/png" href="img/favicon.png" /> </head>
+    <link rel="shortcut icon" type="image/png" href="img/favicon.png" /> 
     <link rel="icon" href="{{ url('/tabler/dist/img/document.png') }}" type="image/x-icon"/>
+    @yield('head')
+    <style>
+        .header-line {
+            width: 100%;
+            height: 5px;
+            position: fixed;
+            top: 0px;
+            z-index:1000;
+            background-color: #17a2b8;
+        }
 
+        /* .sidebar-submenu > ul > li {
+            margin-left: 30px;
+            border-left: 1px solid #DAD7E0;
+        } */
+
+        .sidebar-wrapper .sidebar-menu .sidebar-dropdown .sidebar-submenu li a {
+            margin-left: 30px;
+            border-left: 1px solid #DAD7E0;
+        }
+    </style>
+</head>
 <body>
+    <div class="header-line"></div>
     <div class="page-wrapper toggled light-theme">
         <nav id="sidebar" class="sidebar-wrapper">
             <div class="sidebar-content">
                 <!-- sidebar-brand  -->
-                <div class="sidebar-item sidebar-brand font-weight-bold" style="background-color:#F9F9F9">{{ env('APP_NAME') }}</div>
+                <div class="sidebar-item sidebar-brand font-weight-bold" style="background-color:#F9F9F9;margin-top: 20px;margin-left: 13px;font-size:20pt;">
+                    @yield('topic-name')
+                </div>
                 <!-- sidebar-header  -->
                 <!-- sidebar-menu  -->
                 <div class=" sidebar-item sidebar-menu" style="padding-top:40px">
-                    <ul>
-                        <li class="sidebar-dropdown">
-                            <a href="#"> <i class="fa fa-shopping-cart"></i> <span class="menu-text">Getting Started</span> <span class="badge badge-pill badge-primary">4</span> </a>
+                    <ul class="docs-sidebar">
+                       {{--  <li class="sidebar-dropdown">
+                            <a href="#"><span class="menu-text">Getting Started</span></a>
                             <div class="sidebar-submenu">
                                 <ul>
                                     <li> <a href="#">Setup home page layout
@@ -42,14 +65,14 @@
                             </div>
                         </li>
                         <li>
-                            <a href="#"> <i class="fa fa-book"></i> <span class="menu-text">Basic Usage</span> </a>
+                            <a href="#"> <span class="menu-text">Basic Usage</span> </a>
                         </li>
                         <li>
-                            <a href="#"> <i class="fa fa-calendar"></i> <span class="menu-text">Customizing</span> </a>
+                            <a href="#"> <span class="menu-text">Customizing</span> </a>
                         </li>
                         <li>
-                            <a href="#"> <i class="fa fa-folder"></i> <span class="menu-text">Troubleshooting</span> </a>
-                        </li>
+                            <a href="#"> <span class="menu-text">Troubleshooting</span> </a>
+                        </li>  --}}
                     </ul>
                 </div>
                 <!-- sidebar-menu  -->
@@ -63,22 +86,20 @@
                     <div class="col-md-1">
                         <a id="toggle-sidebar" class="btn rounded-0 p-3" href="#"> <i class="fas fa-bars"></i> </a>
                     </div>
-                    <div class="col-md-8">
-                        <nav aria-label="breadcrumb" class="align-items-center">
-                            <a href="index.html" class="breadcrumb-back" title="Back"></a>
-                            <ol class="breadcrumb d-none d-lg-inline-flex m-0">
-                                <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-                                <li class="breadcrumb-item active" aria-current="page">Layout 2</li>
-                            </ol>
-                        </nav>
-                    </div>
+                    <div class="col-md-8"></div>
                     <div class="col-md-3 text-left">
                         <table>
                             <tr>
-                                <td width="50px">Versi</td>
+                                <td width="50px">Version</td>
                                 <td>
-                                    <select class="form-control">
-                                        <option value="1">1.0</option>
+                                    <select class="form-control version" style="border:none">
+                                        @for($i = 0;$i < count($version_list); $i++)
+                                            @if ($version_list[$i]->id == $latest_version)
+                                                <option value="{{ $version_list[$i]->id }}" selected>{{ $version_list[$i]->name }}</option>
+                                            @else
+                                                <option value="{{ $version_list[$i]->id }}">{{ $version_list[$i]->name }}</option>
+                                            @endif
+                                        @endfor
                                     </select>
                                 </td>
                             </tr>
@@ -112,6 +133,6 @@
     <script src="../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="../node_modules/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.concat.min.js"></script> -->
     <script src="{{ url('docs/js/main.js') }}"></script>
+    @yield('js')
 </body>
-
 </html>
